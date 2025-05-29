@@ -8,6 +8,7 @@ import com.springSecurity.services.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -30,7 +28,7 @@ public class AuthenticationController {
     //sign up controller
     @Operation(
             description = " Register user and send email  that notify you that you have created account and you  with credentials you  have created with ",
-            summary = "this is summary for  register user with email, password , phone number and full name",
+            summary = "this is summary for  register user with email, password , phone number, full name and national ID",
             responses = {
                     @ApiResponse(
                             description = "success  returns new user who have been created",
@@ -49,7 +47,7 @@ public class AuthenticationController {
                     )
             })
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<?> signup(@Valid  @RequestBody SignUpRequest signUpRequest) {
         return ResponseEntity.ok(authenticationService.signUp(signUpRequest));
 
 
@@ -72,9 +70,14 @@ public class AuthenticationController {
                     )
             })
     @PostMapping("/signin")
-    public ResponseEntity<JWtAuthenticationResponse> signin(@RequestBody SignInRequest signInRequest) {
+    public ResponseEntity<JWtAuthenticationResponse> signin(@Valid @RequestBody SignInRequest signInRequest) {
         return ResponseEntity.ok(authenticationService.signin(signInRequest));
 
+    }
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello";
     }
 
     //     generate new token using refresh token

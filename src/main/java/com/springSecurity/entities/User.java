@@ -1,5 +1,6 @@
 package com.springSecurity.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,18 +18,26 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(nullable = false)
     private String fullName;
 
     @Column(nullable = false, unique = true, updatable = false)
     private String email;
+
+    @Column(nullable = false)
     private String phoneNumber;
-    @Column(nullable = false)
 
+    @Column(nullable = false, unique = true)
+    private String nationalId;
+
+    @Column(nullable = false)
+    @JsonIgnore
     private String password;
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

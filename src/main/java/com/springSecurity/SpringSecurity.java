@@ -19,12 +19,14 @@ public class SpringSecurity implements CommandLineRunner {
     }
 
     public void run(String... args) {
-        User adminAccount = userRepository.findByRole(Role.ADMIN);
+        User adminAccount = userRepository.findByRole(Role.ROLE_ADMIN);
         if (null == adminAccount) {
             User user = new User();
             user.setEmail("elissafirstborn@gmail.com");
             user.setFullName("Elissa DUSABE IRADUKUNDA");
-            user.setRole(Role.ADMIN);
+            user.setPhoneNumber("0788000000"); // Optional
+            user.setNationalId("1199200191023456");
+            user.setRole(Role.ROLE_ADMIN);
             user.setPassword(new BCryptPasswordEncoder().encode("rdowssap"));
             userRepository.save(user);
         }

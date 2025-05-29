@@ -44,8 +44,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setFullName(signUpRequest.getFullName());
         user.setEmail(signUpRequest.getEmail());
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
+        user.setNationalId(signUpRequest.getNationalId());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-        user.setRole(signUpRequest.getRole());
+        user.setRole(signUpRequest.getRole() != null ? signUpRequest.getRole() : com.springSecurity.entities.Role.ROLE_STANDARD);
         log.info(signUpRequest.toString());
         boolean userExists = userRepository.findByEmail(signUpRequest.getEmail()).isPresent();
         if (userExists) {
@@ -53,16 +54,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 //
         } else {
             String subject = "Welcome to a World of Possibilities! 🚀";
-            String text = "Dear " + signUpRequest.getFullName() + "\n\n" +
-                    "🌟 Congratulations on joining our vibrant API community! We are delighted to have you on board, and we can't wait to see the incredible projects you'll create with our APIs.\n\n" +
-                    "🚀 Your journey starts now. Explore the limitless potential of our APIs by visiting [API Documentation](https://localhost:8080/swagger-ui.html).\n\n" +
-                    "🔧 Got questions or need assistance? Our dedicated team is here to help. Don't hesitate to reach out!\n\n" +
-                    "🌐 Stay connected with us:\n" +
-                    "LinkedIn: [Follow us on LinkedIn](https://www.linkedin.com/in/elissa-dusabe-415161256//)\n" +
-                    "GitHub: [Check out our repositories on GitHub](https://github.com/Elissa_DI)\n" +
-                    "👉 Let's make your projects shine together!\n\n" +
-                    "Best regards,\n" +
-                    "Elissa Company Group , here credentials you have created for your account " + signUpRequest;
+            String text = "Dear " + signUpRequest.getFullName() + ",\n\n" +
+                    "🌟 Congratulations on joining our vibrant API community! We are delighted to have you on board.\n\n" +
+                    "🚀 Your journey starts now. Explore the potential of our APIs at: https://localhost:8080/swagger-ui.html\n\n" +
+                    "👉 Credentials you created: \nEmail: " + signUpRequest.getEmail() + "\nPhone: " + signUpRequest.getPhoneNumber() + "\nNational ID: " + signUpRequest.getNationalId() + "\n\n" +
+                    "LinkedIn: https://www.linkedin.com/in/elissa-dusabe-415161256/\n" +
+                    "GitHub: https://github.com/Elissa_DI\n\n" +
+                    "Best regards,\nRRA";
 
 
             emailService.sendSimpleEmailMessage(signUpRequest.getEmail(), subject, text);

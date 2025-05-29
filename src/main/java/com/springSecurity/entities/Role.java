@@ -1,6 +1,6 @@
 package com.springSecurity.entities;
 
 public enum Role {
-    USER,
-    ADMIN
+    ROLE_STANDARD,
+    ROLE_ADMIN
 }
